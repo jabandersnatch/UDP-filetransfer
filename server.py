@@ -22,6 +22,9 @@ FILE_250MB = '250MB.bin'
 FILESIZE_100MB = os.path.getsize(FILE_100MB)
 FILESIZE_250MB = os.path.getsize(FILE_250MB)
 
+# Get file size from console
+file_size = int(input("Ingrese el tamaño del archivo (100,250): "))
+
 # Create a UDP sockets
 server = None
 try:
