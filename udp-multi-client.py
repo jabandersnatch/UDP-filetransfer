@@ -4,7 +4,7 @@ import os
 import threading
 import time
 
-IP = '192.168.1.100'
+IP = 'localhost'
 PORT = 5000
 ADDR = (IP, PORT)
 FORMAT = 'utf-8'
@@ -15,16 +15,19 @@ FILE_250MB = '250MB.bin'
 FILESIZE_100MB = os.path.getsize(FILE_100MB)
 FILESIZE_250MB = os.path.getsize(FILE_250MB)
 
+# The batch size is 64 KB
+
+BATCHE_SIZE = 65536
+
 # Define ClientMultiSocket class for receiving data from UDP server
-class ClientMultiSocket:
+class ClientMultiSocket (threading.Thread):
     def __init__(self, ip, port, id, n_clients):
         self.ip = ip
         self.port = port
         self.id = id
         self.n_clients = n_clients
         self.client = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-        self.client.bind((self.ip, self.port))
-        self.client.setblocking(False)
+        threading.Thread.__init__(self)
 
     def run(self):
         # Try to get data from UDP server in run
@@ -34,9 +37,6 @@ class ClientMultiSocket:
                 print(data)
             except:
                 pass
-
-    def run(self):
-        self.receive_thread.join()
 
 
 def main():

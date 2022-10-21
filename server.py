@@ -13,7 +13,7 @@ The connection will be made via UDP sockets
 
 ## IP and port of the server note that the port must support UDP
 IP = 'localhost'
-PORT = 5000 
+PORT = 5000
 ADDR = (IP, PORT)
 FORMAT = 'utf-8'
 
@@ -23,6 +23,9 @@ FILE_250MB = '250MB.bin'
 FILESIZE_100MB = os.path.getsize(FILE_100MB)
 FILESIZE_250MB = os.path.getsize(FILE_250MB)
 
+# The batch size is 64 KB
+BATCHE_SIZE = 65536
+
 # Get file size from console
 file_size = int(input("Ingrese el tamaño del archivo (100,250): "))
 
@@ -31,9 +34,8 @@ server = None
 try:
     server = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 except socket.error:
-    print('Failed to create socket')
-    sys.exit()
-        
+   sys.exit()
+ 
 # Bind the socket to the PORT
 try:
     server.bind(ADDR)
@@ -47,7 +49,7 @@ def main():
     logging.basicConfig(filename=f'{time.strftime("%Y%m%d-%H%M%S")}'+'-log.txt', level=logging.DEBUG, format='%(asctime)s:%(levelname)s:%(message)s')
 
     while True:
-        data, addr = server.recvfrom(1024)
+        data, addr = server.recvfrom(BATCHE_SIZE)
         logging.info(f'Client connected: {addr}')
         print('Client connected: ', addr)
         if data:
@@ -69,8 +71,6 @@ def send_file(file, size, addr):
     # Send the file size
     server.sendto(str(size).encode(FORMAT), addr)
     # Send the file hash
-    server.sendto(generate_hash(file), addr)
-    # Send the file
     with open(file, 'rb') as f:
         data = f.read(1024)
         while data:
@@ -80,11 +80,6 @@ def send_file(file, size, addr):
 
     
 
-def generate_hash(file):
-    import hashlib
-    with open(file, 'rb') as f:
-        file_hash = hashlib.md5(f.read()).hexdigest()
-        return file_hash.encode(FORMAT)
 
 if __name__ == '__main__':
     main()
