@@ -10,7 +10,7 @@ The connection will be made via UDP sockets
 '''
 
 ## IP and port of the server note that the port must support UDP
-IP = '192.168.1.100'
+IP = 'localhost'
 PORT = 5000
 ADDR = (IP, PORT)
 FORMAT = 'utf-8'
@@ -27,6 +27,5 @@ try:
 except socket.error:
     print('Failed to create socket')
     sys.exit()
-
 
 
