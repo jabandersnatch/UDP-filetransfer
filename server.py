@@ -2,6 +2,7 @@
 # Author: Juan Andrés Méndez, Jesus David Barrios, Sergio Esteban Peñuela
 
 import socket
+import threading
 import sys
 import logging
 import time
@@ -56,16 +57,23 @@ def main():
     while True:
 
         data , addr = server.recvfrom(BATCHE_SIZE)
-        if option == '1' and data.decode(FORMAT) == 'Ready':
+
+        if data.decode(FORMAT) == 'Ready':
+            thread = threading.Thread(target=handle_client, args=(option, addr, data))
+            thread.start()
+            print('Connected to: ', addr)
+
+
+
+def handle_client(option, addr, data):
+        if option == '1':
             # Send the file
             print ('Sending file 100MB.bin to ', addr)
             send_file(FILE_100MB, FILESIZE_100MB, addr)
-            break
-        elif option == '2' and data.decode(FORMAT) == 'Ready':
+        elif option == '2':
             # Send the file
             print ('Sending file 250MB.bin to ', addr)
             send_file(FILE_250MB, FILESIZE_250MB, addr)
-            break
         else:
             print('Invalid option')
             option = input('Select an option: ')
