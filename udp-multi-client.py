@@ -1,10 +1,9 @@
 import socket
-import sys
 import os
 import threading
 import time
 
-IP = 'localhost'
+IP = '192.168.1.100'
 PORT = 5000
 ADDR = (IP, PORT)
 FORMAT = 'utf-8'
@@ -17,26 +16,33 @@ FILESIZE_250MB = os.path.getsize(FILE_250MB)
 
 # The batch size is 64 KB
 
-BATCHE_SIZE = 65536
+BATCHE_SIZE = 1024 * 36
 
 # Define ClientMultiSocket class for receiving data from UDP server
 class ClientMultiSocket (threading.Thread):
-    def __init__(self, ip, port, id, n_clients):
+    def __init__(self, id, ip, n_clients):
         self.ip = ip
-        self.port = port
         self.id = id
         self.n_clients = n_clients
-        self.client = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+        self.client = socket.socket(family = socket.AF_INET, type = socket.SOCK_DGRAM)
         threading.Thread.__init__(self)
 
     def run(self):
         # Try to get data from UDP server in run
-        while True:
-            try:
-                data, addr = self.client.recvfrom(1024)
-                print(data)
-            except:
-                pass
+        self.client.sendto('Ready'.encode(FORMAT), ADDR)
+        state_transfer = False
+        while not state_transfer:
+            # Recieve file from the server
+            
+            with open(f'client_{self.id}_file.bin', 'wb') as f:
+                while True:
+                    data, addr = self.client.recvfrom(BATCHE_SIZE)
+                    if not data:
+                        state_transfer = True
+                        break
+                    if addr == ADDR:
+                        f.write(data)
+
 
 
 def main():
@@ -53,7 +59,7 @@ def main():
     threads = []
     for i in range(num_clientes):
         print('Creating client ', i)
-        threads.append(ClientMultiSocket(IP,PORT,i,num_clientes))
+        threads.append(ClientMultiSocket(id = i, ip = IP, n_clients = num_clientes))
         time.sleep(0.1)
     
     for thread in threads:
