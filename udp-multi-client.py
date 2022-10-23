@@ -1,6 +1,7 @@
 import socket
 import os
 import threading
+import logging
 import time
 
 IP = '192.168.1.100'
@@ -30,9 +31,10 @@ class ClientMultiSocket (threading.Thread):
     def run(self):
         # Try to get data from UDP server in run
         self.client.sendto('Ready'.encode(FORMAT), ADDR)
+
         state_transfer = False
+        start = time.time()
         while not state_transfer:
-            # Recieve file from the server
             
             with open(f'client_{self.id}_file.bin', 'wb') as f:
                 while True:
@@ -42,8 +44,15 @@ class ClientMultiSocket (threading.Thread):
                         break
                     if addr == ADDR:
                         f.write(data)
+        end = time.time()
 
+        transferenciaExitosa = False
+        # Verify if created file has the same size of the original file
+        if os.path.getsize(f'./ArchivosRecibidos/client_{self.id}_file.bin') == FILESIZE_100MB or os.path.getsize(f'./ArchivosRecibidos/client_{self.id}_file.bin') == FILESIZE_250MB:
+            transferenciaExitosa = True
 
+        # log the information of the client
+        logging.info(f'Client_id: {str(self.id)}, client address: {self.client.getsockname()}, successful transfer: {str(transferenciaExitosa)},  transference time: {str(end-start)} segs')
 
 def main():
     
@@ -55,6 +64,10 @@ def main():
             numero_clientes_definido = True
         else:
             print('Invalid number of clients')
+
+    # Create log file for each client
+    logging.basicConfig(filename=f'./Logs/{time.strftime("%Y-%m-%d-%H-%M-%S")}-{num_clientes}_clients-log.txt', level=logging.DEBUG, format='%(asctime)s:%(levelname)s:%(message)s')
+
 
     threads = []
     for i in range(num_clientes):

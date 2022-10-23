@@ -7,6 +7,7 @@ import sys
 import logging
 import time
 import os
+from tracemalloc import start
 
 '''
 The connection will be made via UDP sockets
@@ -48,12 +49,18 @@ except socket.error as e:
 print('SERVER STARTED AT PORT: ', PORT)
 
 def main():
-    logging.basicConfig(filename=f'{time.strftime("%Y%m%d-%H%M%S")}'+'-log.txt', level=logging.DEBUG, format='%(asctime)s:%(levelname)s:%(message)s')
     # Ask the user to select the file to send
     print('Select the file to send')
     print('1. 100MB.bin')
     print('2. 250MB.bin')
     option = input('Select an option: ')
+
+    nombreArchivo = '100MB.bin'
+    if option == '2':
+        nombreArchivo = '250MB.bin'
+
+    logging.basicConfig(filename=f'./Logs/{time.strftime("%Y%m%d-%H%M%S")}-{nombreArchivo}-server-log.txt', level=logging.DEBUG, format='%(asctime)s:%(levelname)s:%(message)s')
+
     while True:
 
         data , addr = server.recvfrom(BATCHE_SIZE)
@@ -82,6 +89,7 @@ def send_file(file, size, addr):
     # Send the file size
     server.sendto(str(size).encode(FORMAT), addr)
     # Send the file hash
+    start = time.time()
     with open(file, 'rb') as f:
         data = f.read(BATCHE_SIZE)
         server.sendto(data, addr)
@@ -90,11 +98,12 @@ def send_file(file, size, addr):
             data = f.read(BATCHE_SIZE)
             server.sendto(data, addr)
             logging.info(f'Sent {BATCHE_SIZE} bytes')
+    end = time.time()
+    
+    # Log the name and size of the file
+    logging.info(f'File name: {file}, File size: {size}, Transfer Time: {str(end - start)} segs')
 
     print('File sent')
-
-    
-
 
 if __name__ == '__main__':
     main()
