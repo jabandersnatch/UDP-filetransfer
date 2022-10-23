@@ -12,7 +12,7 @@ The connection will be made via UDP sockets
 '''
 
 ## IP and port of the server note that the port must support UDP
-IP = 'localhost'
+IP = '192.168.1.100'
 PORT = 5000
 ADDR = (IP, PORT)
 FORMAT = 'utf-8'
@@ -24,22 +24,23 @@ FILESIZE_100MB = os.path.getsize(FILE_100MB)
 FILESIZE_250MB = os.path.getsize(FILE_250MB)
 
 # The batch size is 64 KB
-BATCHE_SIZE = 65536
+BATCHE_SIZE = 1024 * 36
 
-# Get file size from console
-file_size = int(input("Ingrese el tamaño del archivo (100,250): "))
 
 # Create a UDP sockets
 server = None
 try:
     server = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-except socket.error:
-   sys.exit()
+except socket.error as e:
+    print('Error creating socket: ' + str(e))
+    sys.exit()
  
 # Bind the socket to the PORT
 try:
     server.bind(ADDR)
-except socket.error:
+    print('Server started')
+except socket.error as e:
+    print('Bind failed. Error Code : ' + str(e))
     print('Bind failed')
     sys.exit()
 
@@ -47,35 +48,41 @@ print('SERVER STARTED AT PORT: ', PORT)
 
 def main():
     logging.basicConfig(filename=f'{time.strftime("%Y%m%d-%H%M%S")}'+'-log.txt', level=logging.DEBUG, format='%(asctime)s:%(levelname)s:%(message)s')
-
+    # Ask the user to select the file to send
+    print('Select the file to send')
+    print('1. 100MB.bin')
+    print('2. 250MB.bin')
+    option = input('Select an option: ')
     while True:
-        data, addr = server.recvfrom(BATCHE_SIZE)
-        logging.info(f'Client connected: {addr}')
-        print('Client connected: ', addr)
-        if data:
-            if data == b'100MB':
-                logging.info(f'Client requested 100MB file')
-                send_file(FILE_100MB, FILESIZE_100MB, addr)
-            elif data == b'250MB':
-                logging.info(f'Client requested 250MB file')
-                send_file(FILE_250MB, FILESIZE_250MB, addr)
-            else:
-                logging.info(f'Client requested unknown file')
-                print('Unknown file requested')
-                server.sendto(b'Unknown file requested', addr)
+
+        data , addr = server.recvfrom(BATCHE_SIZE)
+        if option == '1' and data.decode(FORMAT) == 'Ready':
+            # Send the file
+            print ('Sending file 100MB.bin to ', addr)
+            send_file(FILE_100MB, FILESIZE_100MB, addr)
+            break
+        elif option == '2' and data.decode(FORMAT) == 'Ready':
+            # Send the file
+            print ('Sending file 250MB.bin to ', addr)
+            send_file(FILE_250MB, FILESIZE_250MB, addr)
+            break
         else:
-            logging.info(f'Client disconnected')
-            print('Client disconnected')
+            print('Invalid option')
+            option = input('Select an option: ')
 
 def send_file(file, size, addr):
     # Send the file size
     server.sendto(str(size).encode(FORMAT), addr)
     # Send the file hash
     with open(file, 'rb') as f:
-        data = f.read(1024)
+        data = f.read(BATCHE_SIZE)
+        server.sendto(data, addr)
+        logging.info(f'Sent {BATCHE_SIZE} bytes')
         while data:
-            if server.sendto(data, addr):
-                data = f.read(1024)
+            data = f.read(BATCHE_SIZE)
+            server.sendto(data, addr)
+            logging.info(f'Sent {BATCHE_SIZE} bytes')
+
     print('File sent')
 
     
