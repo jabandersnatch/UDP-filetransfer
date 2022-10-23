@@ -52,7 +52,7 @@ class ClientMultiSocket (threading.Thread):
             transferenciaExitosa = True
 
         # log the information of the client
-        logging.info(f'Client_id: {str(self.id)}, client address: {self.client.getsockname()}, successful transfer: {str(transferenciaExitosa)},  transference time: {str(end-start)} segs')
+        logging.info(f'Client_id: {str(self.id)}, client address: {self.client.getsockname()}, successful transfer: {str(transferenciaExitosa)},  transference time: {str(end-start)} segs, file size: {str(os.path.getsize(f"./ArchivosRecibidos/client_{self.id}_file.bin"))}B')
 
 def main():
     
