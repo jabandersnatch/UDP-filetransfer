@@ -1,0 +1,5 @@
+2022-10-23 21:52:20,477:INFO:Client_id: 1, client address: ('0.0.0.0', 52024), successful transfer: False,  transference time: 36.6829092502594 segs, file size: 189805193B
+2022-10-23 21:52:22,018:INFO:Client_id: 3, client address: ('0.0.0.0', 52026), successful transfer: False,  transference time: 38.0071907043457 segs, file size: 199766665B
+2022-10-23 21:52:22,045:INFO:Client_id: 2, client address: ('0.0.0.0', 52025), successful transfer: False,  transference time: 38.143852949142456 segs, file size: 198180873B
+2022-10-23 21:52:22,059:INFO:Client_id: 4, client address: ('0.0.0.0', 52027), successful transfer: False,  transference time: 37.9393105506897 segs, file size: 201765513B
+2022-10-23 21:52:22,276:INFO:Client_id: 0, client address: ('0.0.0.0', 52023), successful transfer: False,  transference time: 38.59155035018921 segs, file size: 194163337B

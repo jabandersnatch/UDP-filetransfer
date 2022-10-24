@@ -14,11 +14,11 @@ FILE_100MB = '100MB.bin'
 FILE_250MB = '250MB.bin'
 FILESIZE_100MB = os.path.getsize(FILE_100MB)
 FILESIZE_250MB = os.path.getsize(FILE_250MB)
+NUM_TEST = 6
 
 # The batch size is 64 KB
 
-BATCHE_SIZE = 1024 * 36
-
+BATCHE_SIZE = 1024 * 8
 # Define ClientMultiSocket class for receiving data from UDP server
 class ClientMultiSocket (threading.Thread):
     def __init__(self, id, ip, n_clients):
@@ -28,6 +28,7 @@ class ClientMultiSocket (threading.Thread):
         self.client = socket.socket(family = socket.AF_INET, type = socket.SOCK_DGRAM)
         threading.Thread.__init__(self)
 
+
     def run(self):
         # Try to get data from UDP server in run
         self.client.sendto('Ready'.encode(FORMAT), ADDR)
@@ -36,7 +37,7 @@ class ClientMultiSocket (threading.Thread):
         start = time.time()
         while not state_transfer:
             
-            with open(f'client_{self.id}_file.bin', 'wb') as f:
+            with open(f'./ArchivosRecibidos/client_{self.id}_prueba_{NUM_TEST}.txt', 'wb') as f:
                 while True:
                     data, addr = self.client.recvfrom(BATCHE_SIZE)
                     if not data:
@@ -48,11 +49,11 @@ class ClientMultiSocket (threading.Thread):
 
         transferenciaExitosa = False
         # Verify if created file has the same size of the original file
-        if os.path.getsize(f'./ArchivosRecibidos/client_{self.id}_file.bin') == FILESIZE_100MB or os.path.getsize(f'./ArchivosRecibidos/client_{self.id}_file.bin') == FILESIZE_250MB:
+        if os.path.getsize(f'./ArchivosRecibidos/client_{self.id}_prueba_{NUM_TEST}.txt') == FILESIZE_100MB or os.path.getsize(f'./ArchivosRecibidos/client_{self.id}_prueba_{NUM_TEST}.txt') == FILESIZE_250MB:
             transferenciaExitosa = True
 
         # log the information of the client
-        logging.info(f'Client_id: {str(self.id)}, client address: {self.client.getsockname()}, successful transfer: {str(transferenciaExitosa)},  transference time: {str(end-start)} segs, file size: {str(os.path.getsize(f"./ArchivosRecibidos/client_{self.id}_file.bin"))}B')
+        logging.info(f'Client_id: {str(self.id)}, client address: {self.client.getsockname()}, successful transfer: {str(transferenciaExitosa)},  transference time: {str(end-start)} segs, file size: {str(os.path.getsize(f"./ArchivosRecibidos/client_{self.id}_prueba_{NUM_TEST}.txt"))}B')
 
 def main():
     
@@ -66,7 +67,7 @@ def main():
             print('Invalid number of clients')
 
     # Create log file for each client
-    logging.basicConfig(filename=f'./Logs/{time.strftime("%Y-%m-%d-%H-%M-%S")}-{num_clientes}_clients-log.txt', level=logging.DEBUG, format='%(asctime)s:%(levelname)s:%(message)s')
+    logging.basicConfig(filename=f'./Logs/{time.strftime("%Y-%m-%d-%H-%M-%S")}-{NUM_TEST}_test-log.txt', level=logging.DEBUG, format='%(asctime)s:%(levelname)s:%(message)s')
 
 
     threads = []
