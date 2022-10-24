@@ -14,7 +14,7 @@ FILE_100MB = '100MB.bin'
 FILE_250MB = '250MB.bin'
 FILESIZE_100MB = os.path.getsize(FILE_100MB)
 FILESIZE_250MB = os.path.getsize(FILE_250MB)
-NUM_TEST = 6
+NUM_TEST = 5
 
 # The batch size is 64 KB
 
@@ -67,7 +67,7 @@ def main():
             print('Invalid number of clients')
 
     # Create log file for each client
-    logging.basicConfig(filename=f'./Logs/{time.strftime("%Y-%m-%d-%H-%M-%S")}-{NUM_TEST}_test-log.txt', level=logging.DEBUG, format='%(asctime)s:%(levelname)s:%(message)s')
+    logging.basicConfig(filename=f'./Logs/{time.strftime("%Y-%m-%d-%H-%M-%S")}_{NUM_TEST}_prueba-log.txt', level=logging.DEBUG, format='%(asctime)s:%(levelname)s:%(message)s')
 
 
     threads = []

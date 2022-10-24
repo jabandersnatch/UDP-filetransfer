@@ -1,0 +1,1 @@
+2022-10-23 22:54:24,361:INFO:Client_id: 0, client address: ('0.0.0.0', 51340), successful transfer: False,  transference time: 3.704972505569458 segs, file size: 104857609B
