@@ -26,7 +26,7 @@ FILESIZE_100MB = os.path.getsize(FILE_100MB)
 FILESIZE_250MB = os.path.getsize(FILE_250MB)
 
 # The batch size is 64 KB
-BATCHE_SIZE = 1024 * 36
+BATCHE_SIZE = 1024 * 8
 
 
 # Create a UDP sockets
@@ -93,11 +93,9 @@ def send_file(file, size, addr):
     with open(file, 'rb') as f:
         data = f.read(BATCHE_SIZE)
         server.sendto(data, addr)
-        logging.info(f'Sent {BATCHE_SIZE} bytes')
         while data:
             data = f.read(BATCHE_SIZE)
             server.sendto(data, addr)
-            logging.info(f'Sent {BATCHE_SIZE} bytes')
     end = time.time()
     
     # Log the name and size of the file
