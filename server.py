@@ -59,7 +59,7 @@ def main():
     if option == '2':
         nombreArchivo = '250MB.bin'
 
-    logging.basicConfig(filename=f'./Logs/{time.strftime("%Y%m%d-%H%M%S")}-{nombreArchivo}-server-log.txt', level=logging.DEBUG, format='%(asctime)s:%(levelname)s:%(message)s')
+    logging.basicConfig(filename=f'./Logs/{time.strftime("%Y-%m-%d-%H-%M-%S")}-{nombreArchivo}-server-log.txt', level=logging.DEBUG, format='%(asctime)s:%(levelname)s:%(message)s')
 
     while True:
 

@@ -1,0 +1,10 @@
+2022-10-24 00:03:12,920:INFO:File name: 250MB.bin, File size: 250000000, Transfer Time: 59.92144203186035 segs
+2022-10-24 00:03:13,312:INFO:File name: 250MB.bin, File size: 250000000, Transfer Time: 60.638975620269775 segs
+2022-10-24 00:03:13,671:INFO:File name: 250MB.bin, File size: 250000000, Transfer Time: 61.2222466468811 segs
+2022-10-24 00:03:14,049:INFO:File name: 250MB.bin, File size: 250000000, Transfer Time: 61.16708540916443 segs
+2022-10-24 00:03:14,287:INFO:File name: 250MB.bin, File size: 250000000, Transfer Time: 61.51002240180969 segs
+2022-10-24 00:03:14,364:INFO:File name: 250MB.bin, File size: 250000000, Transfer Time: 62.033040046691895 segs
+2022-10-24 00:03:14,719:INFO:File name: 250MB.bin, File size: 250000000, Transfer Time: 61.393168449401855 segs
+2022-10-24 00:03:14,868:INFO:File name: 250MB.bin, File size: 250000000, Transfer Time: 61.74373245239258 segs
+2022-10-24 00:03:14,878:INFO:File name: 250MB.bin, File size: 250000000, Transfer Time: 62.31716227531433 segs
+2022-10-24 00:03:14,991:INFO:File name: 250MB.bin, File size: 250000000, Transfer Time: 61.76981592178345 segs

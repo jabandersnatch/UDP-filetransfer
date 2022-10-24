@@ -1,0 +1,1 @@
+2022-10-23 23:54:24,528:INFO:File name: 100MB.bin, File size: 104857600, Transfer Time: 3.701892137527466 segs
