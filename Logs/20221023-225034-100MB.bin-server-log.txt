@@ -1,0 +1,5 @@
+2022-10-23 22:50:54,210:INFO:File name: 100MB.bin, File size: 104857600, Transfer Time: 14.975330114364624 segs
+2022-10-23 22:50:56,131:INFO:File name: 100MB.bin, File size: 104857600, Transfer Time: 16.577350854873657 segs
+2022-10-23 22:50:56,606:INFO:File name: 100MB.bin, File size: 104857600, Transfer Time: 17.261617183685303 segs
+2022-10-23 22:50:56,790:INFO:File name: 100MB.bin, File size: 104857600, Transfer Time: 17.329522609710693 segs
+2022-10-23 22:50:57,024:INFO:File name: 100MB.bin, File size: 104857600, Transfer Time: 17.908855676651 segs
